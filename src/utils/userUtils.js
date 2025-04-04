@@ -22,11 +22,20 @@ export async function userLogin(account, password) {
             password: encryptPwd
         };
         response = await AuthApi.getUserToken(params);
-        const { data: accessToken } = response;
-        if (accessToken && accessToken !== 'null') {
-            localStorage.setItem('Authorization', accessToken);
+        
+        // 检查响应状态
+        if (response.code !== '0') {
+            throw new Error(response.message || '登录失败');
         }
+
+        const { data: accessToken } = response;
+        if (!accessToken || accessToken === 'null') {
+            throw new Error('登录失败：未获取到有效的访问令牌');
+        }
+        
+        localStorage.setItem('Authorization', accessToken);
     } catch (error) {
+        console.error('登录失败:', error);
         throw error;
     }
 }

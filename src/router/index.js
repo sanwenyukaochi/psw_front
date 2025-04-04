@@ -9,6 +9,8 @@ const routes = [
         children: [
             {path: '/userList',component: () => import('@/views/admin/views/UserList.vue'),},
             {path: '/typeList',component: () => import('@/views/admin/views/TypeList.vue'),},
+            {path: '/petList',component: () => import('@/views/admin/views/PetList.vue'),},
+            {path: '/goodList',component: () => import('@/views/admin/views/GoodList.vue'),},
             {path: '/chat',component: () => import('@/views/Chat.vue'),},
         ]
     },
