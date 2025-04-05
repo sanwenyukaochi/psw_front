@@ -40,8 +40,8 @@ const items = [
   {key: '6', label: '宠物分类管理', icon: () => h(CrownFilled), onClick: () => router.push('/typeList'),},
   {key: '7', label: '宠物订单管理', icon: () => h(CreditCardFilled), onClick: () => router.push('/'),},
   {key: '8', label: '商品订单管理', icon: () => h(AppstoreFilled), onClick: () => router.push('/'),},
-  {key: '9', label: '论坛管理', icon: () => h(FireFilled), onClick: () => router.push('/'),},
-  {key: '10', label: '公告管理', icon: () => h(SoundFilled), onClick: () => router.push('/'),},
+  {key: '9', label: '论坛管理', icon: () => h(FireFilled), onClick: () => router.push('/forumList'),},
+  {key: '10', label: '公告管理', icon: () => h(SoundFilled), onClick: () => router.push('/noticeList'),},
   {key: '11', label: 'AI问答', icon: () => h(RobotFilled), onClick: () => router.push('/chat'),},
 ];
 
