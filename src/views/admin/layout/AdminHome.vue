@@ -7,7 +7,7 @@
     </a-layout-sider>
     <a-layout>
       <!--header-->
-      <a-layout-header style="background: #fff; padding: 0" >
+      <a-layout-header class="title" >
         ☑️✅☑️宠物销售后台管理系统☑️✅☑️
       </a-layout-header>
       <!--content-->
@@ -15,7 +15,7 @@
         <router-view></router-view>
       </a-layout-content>
       <!--footer-->
-      <a-layout-footer style="text-align: center">
+      <a-layout-footer class="footer">
         <a href="https://github.com/sanwenyukaochi" target="_blank">
           我是 三文鱼烤翅 ，欢迎访问我的 GitHub ！
         </a>
@@ -40,5 +40,37 @@ import AdminSider from "@/views/admin/layout/AdminSider.vue";
 }
 [data-theme='dark'] .site-layout .site-layout-background {
   background: #141414;
+}
+
+/* 页脚样式 */
+.footer {
+  text-align: center;
+
+  background-size: cover;
+  background-position: center;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.footer a {
+
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer a:hover {
+  color: #f4a261;
+}
+
+/* 标题样式 */
+.title {
+  color: #ffffff;
+  background-color: #4885ed;
+  background-size: cover;
+  background-position: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 16px;
 }
 </style>

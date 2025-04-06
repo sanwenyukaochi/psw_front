@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import petApi from "@/api/admin/petApi.js";
-import typeApi from "@/api/admin/typeApi.js";
+import petApi from "@/api/admin/petListApi.js";
+import typeApi from "@/api/admin/typeListApi.js";
 import dayjs from 'dayjs';
 
 // 状态管理

@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import userApi from "@/api/admin/userApi.js";
+import userApi from "@/api/admin/userListApi.js";
 
 // 状态管理
 const loading = ref(false);

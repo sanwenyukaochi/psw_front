@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import forumApi from "@/api/admin/forumApi.js";
+import forumApi from "@/api/admin/forumListApi.js";
 
 // 状态管理
 const loading = ref(false);

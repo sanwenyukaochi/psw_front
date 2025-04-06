@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, ref } from 'vue';
 import { message } from 'ant-design-vue';
-import goodApi from "@/api/admin/goodApi.js";
+import goodApi from "@/api/admin/goodListApi.js";
 
 // 状态管理
 const loading = ref(false);

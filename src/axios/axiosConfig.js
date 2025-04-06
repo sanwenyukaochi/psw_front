@@ -24,11 +24,11 @@ httpRequest.interceptors.request.use(function (config){
 httpRequest.interceptors.response.use(function (response){
     const data = response.data;
     if(data){
-        if(data.code === '500'){
+        console.log("代码:" + data.code + " 信息:" + data.message);
+        if(data.code !== '0'){
             // window.alert(data.message);
             throw new Error(data.message);
         }
-        console.log("代码:" + data.code + " 信息:" + data.message);
         console.log(data.data);
     }
     return data;

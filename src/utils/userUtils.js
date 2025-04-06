@@ -35,7 +35,7 @@ export async function userLogin(account, password) {
         
         localStorage.setItem('Authorization', accessToken);
     } catch (error) {
-        console.error('登录失败:', error);
+        // 直接抛出错误，不在这里打印日志
         throw error;
     }
 }
