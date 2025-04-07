@@ -3,11 +3,15 @@ import HelloWorld from "@/views/HelloWorld.vue";
 
 //定义路由关系
 const routes = [
+    {path: '/userLogin',component: () => import('@/views/user/UserLogin.vue'),},
+    // {path: '/register',component: () => import('@/views/user/UserRegister.vue'),},
     {path: '/userHome',component: () => import('@/views/user/layout/UserHome.vue'),
         children: [
             {path: '/main',component: () => import('@/views/user/views/Home.vue'),},
             {path: '/pet',component: () => import('@/views/user/views/Pet.vue'),},
-            {path: '/petInfo',component: () => import('@/views/user/views/PetInfo.vue'),},
+            {path: '/pet/:id',component: () => import('@/views/user/views/PetInfo.vue'),},
+            {path: '/good',component: () => import('@/views/user/views/Good.vue'),},
+            {path: '/forum',component: () => import('@/views/user/views/Forum.vue'),},
         ]
     },
     {path: '/adminLogin',component: () => import('@/views/admin/AdminLogin.vue'),},

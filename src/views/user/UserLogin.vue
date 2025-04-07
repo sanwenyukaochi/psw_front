@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { message } from 'ant-design-vue';
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';
-import { adminLogin } from '@/utils/userUtils.js';
+import { userLogin } from '@/utils/userUtils.js';
 
 // 状态管理
 const loading = ref(false);
@@ -31,17 +31,17 @@ const rules = {
 const handleLogin = async (values) => {
   try {
     loading.value = true;
-    await adminLogin(values.username, values.password);
+    await userLogin(values.username, values.password);
     
     // 记住用户名
     if (form.remember) {
-      localStorage.setItem('adminUsername', values.username);
+      localStorage.setItem('username', values.username);
     } else {
-      localStorage.removeItem('adminUsername');
+      localStorage.removeItem('username');
     }
     
     message.success('登录成功');
-    await router.push('/adminHome');
+    await router.push('/userHome');
   } catch (error) {
     console.error('登录失败:', error);
     message.error(error.message || '登录失败，请检查用户名和密码');
@@ -56,9 +56,14 @@ const handleLoginFailed = (errorInfo) => {
   message.error('请检查输入信息是否正确');
 };
 
+// 处理注册跳转
+const handleRegister = () => {
+  router.push('/register');
+};
+
 // 初始化时，如果有记住的用户名则自动填充
-if (localStorage.getItem('adminUsername')) {
-  form.username = localStorage.getItem('adminUsername');
+if (localStorage.getItem('username')) {
+  form.username = localStorage.getItem('username');
 }
 </script>
 
@@ -66,7 +71,7 @@ if (localStorage.getItem('adminUsername')) {
   <div class="login-page">
     <div class="login-container">
       <div class="login-header">
-        <h1>宠物商城管理系统</h1>
+        <h1>宠物商城</h1>
         <p>欢迎回来，请登录您的账号</p>
       </div>
       
@@ -105,9 +110,12 @@ if (localStorage.getItem('adminUsername')) {
         </a-form-item>
 
         <a-form-item>
-          <a-checkbox v-model:checked="form.remember" class="remember-checkbox">
-            记住账号
-          </a-checkbox>
+          <div class="form-footer">
+            <a-checkbox v-model:checked="form.remember" class="remember-checkbox">
+              记住账号
+            </a-checkbox>
+            <a class="register-link" @click="handleRegister">注册账号</a>
+          </div>
         </a-form-item>
 
         <a-form-item>
@@ -124,7 +132,7 @@ if (localStorage.getItem('adminUsername')) {
       </a-form>
 
       <div class="login-footer">
-        <p>请使用管理员账号登录系统</p>
+        <p>登录即表示同意我们的服务条款和隐私政策</p>
       </div>
     </div>
   </div>
@@ -137,6 +145,8 @@ if (localStorage.getItem('adminUsername')) {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+  background-size: cover;
+  background-position: center;
 }
 
 .login-container {
@@ -178,8 +188,23 @@ if (localStorage.getItem('adminUsername')) {
   margin-right: 10px;
 }
 
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .remember-checkbox {
   color: #666;
+}
+
+.register-link {
+  color: #1677ff;
+  cursor: pointer;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 
 .login-button {

@@ -6,14 +6,9 @@ import logoImage from '@/assets/img/logo/w_logo0.png';
 import router from "@/router/index.js";
 const items = [
   {key: '1', label: '主页', icon: () => h(PieChartOutlined), onClick: () => router.push('/main')},
-  {key: '2', label: '宠物购买', icon: () => h(PieChartOutlined),onClick: () => router.push('/pet')},
-  {key: '3', label: '商店', icon: () => h(HomeFilled),},
-  {key: '4', label: '论坛', icon: () => h(HomeFilled),
-    children: [
-      {key: '4-1', label: '查看论坛', onClick: () => router.push('')},
-      {key: '4-2', label: '发布论坛'},
-    ],
-  },
+  {key: '2', label: '宠物购买', icon: () => h(PieChartOutlined), onClick: () => router.push('/pet')},
+  {key: '3', label: '商店', icon: () => h(HomeFilled), onClick: () => router.push('/good')},
+  {key: '4', label: '论坛', icon: () => h(HomeFilled), onClick: () => router.push('/forum')},
   {key: '5', label: '公告', icon: () => h(HomeFilled),},
   {key: '6', label: '个人中心', icon: () => h(HomeFilled),},
 ];

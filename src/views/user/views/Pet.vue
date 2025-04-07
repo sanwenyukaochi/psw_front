@@ -2,10 +2,11 @@
 import { reactive, onMounted, ref, computed } from 'vue';
 import { message } from 'ant-design-vue';
 import { HeartOutlined } from '@ant-design/icons-vue';
-import petApi from "@/api/user/Pet.js";
-import typeApi from "@/api/admin/typeListApi.js";
+import { useRouter } from 'vue-router';
+import petApi from "@/api/user/pet.js";
 
 // 状态管理
+const router = useRouter();
 const loading = ref(false);
 const pets = ref([]);
 const total = ref(0);
@@ -30,7 +31,7 @@ const currentPage = computed({
 // 获取宠物类型列表
 const fetchPetTypes = async () => {
   try {
-    const { data } = await typeApi.getAllType();
+    const { data } = await petApi.getAllType();
     typeOptions.value = data.map(type => ({
       value: type.typeId,
       label: type.typeName
@@ -86,6 +87,11 @@ const handleReset = () => {
 const formatDate = (date) => {
   if (!date) return '-';
   return new Date(date).toLocaleDateString();
+};
+
+// 跳转到宠物详情页
+const goToPetDetail = (petId) => {
+  router.push(`/pet/${petId}`);
 };
 
 // 初始化
@@ -151,7 +157,7 @@ onMounted(() => {
         <div class="pet-content">
           <a-spin :spinning="loading">
             <div class="pet-grid">
-              <div v-for="pet in pets" :key="pet.petId" class="pet-card">
+              <div v-for="pet in pets" :key="pet.petId" class="pet-card" @click="goToPetDetail(pet.petId)">
                 <div class="pet-card-header">
                   <img :src="pet.image || '/default-pet.png'" :alt="pet.petName" class="pet-image"/>
                   <heart-outlined class="favorite-icon" />
@@ -253,6 +259,7 @@ onMounted(() => {
   overflow: hidden;
   transition: all 0.3s;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .pet-card:hover {
