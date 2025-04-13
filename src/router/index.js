@@ -1,10 +1,10 @@
 import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
-import HelloWorld from "@/views/HelloWorld.vue";
 
 //定义路由关系
 const routes = [
+    {path: '/', redirect: '/userLogin'},
     {path: '/userLogin',component: () => import('@/views/user/UserLogin.vue'),},
-    // {path: '/register',component: () => import('@/views/user/UserRegister.vue'),},
+    {path: '/userRegister',component: () => import('@/views/user/UserRegister.vue'),},
     {path: '/userHome',component: () => import('@/views/user/layout/UserHome.vue'),
         children: [
             {path: '/main',component: () => import('@/views/user/views/Home.vue'),},
@@ -12,6 +12,10 @@ const routes = [
             {path: '/pet/:id',component: () => import('@/views/user/views/PetInfo.vue'),},
             {path: '/good',component: () => import('@/views/user/views/Good.vue'),},
             {path: '/forum',component: () => import('@/views/user/views/Forum.vue'),},
+            {path: '/notice',component: () => import('@/views/user/views/Notice.vue'),},
+            {path: '/user',component: () => import('@/views/user/views/User.vue'),},
+            {path: '/petOrder',component: () => import('@/views/user/views/PetOrder.vue'),},
+            {path: '/chat',component: () => import('@/views/Chat.vue'),},
         ]
     },
     {path: '/adminLogin',component: () => import('@/views/admin/AdminLogin.vue'),},
@@ -21,8 +25,11 @@ const routes = [
             {path: '/typeList',component: () => import('@/views/admin/views/TypeList.vue'),},
             {path: '/petList',component: () => import('@/views/admin/views/PetList.vue'),},
             {path: '/goodList',component: () => import('@/views/admin/views/GoodList.vue'),},
+            {path: '/goodOrderList',component: () => import('@/views/admin/views/GoodOrderList.vue'),},
             {path: '/noticeList',component: () => import('@/views/admin/views/NoticeList.vue'),},
             {path: '/forumList',component: () => import('@/views/admin/views/ForumList.vue'),},
+            {path: '/petOrderList',component: () => import('@/views/admin/views/PetOrderList.vue'),},
+            {path: '/mainList',component: () => import('@/views/admin/views/MainList.vue'),},
             {path: '/chat',component: () => import('@/views/Chat.vue'),},
         ]
     },

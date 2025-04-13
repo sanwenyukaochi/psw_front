@@ -1,10 +1,10 @@
-import httpRequest from '@/axios/axiosConfig';
+import axios from 'axios';
 
 const chatApi = {
   // 获取AI回复
   getChat: async (message) => {
     try {
-      const response = await httpRequest.get('/v1/chat/chatClient', {
+      const response = await axios.get('http://127.0.0.1:8088/api/v1/chat/chatClient', {
         params: { message },
         responseType: 'stream'
       });

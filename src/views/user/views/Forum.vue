@@ -270,7 +270,7 @@ onMounted(() => {
 
   <!-- 发布论坛对话框 -->
   <a-modal
-    v-model:visible="createModalVisible"
+    v-model:open="createModalVisible"
     title="发布论坛"
     @ok="handleSubmit"
     @cancel="handleCancel"
@@ -332,7 +332,6 @@ onMounted(() => {
 
 <style scoped>
 .page-container {
-  min-height: 100vh;
   background: #f0f2f5;
   padding: 24px;
 }

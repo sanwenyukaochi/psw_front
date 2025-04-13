@@ -11,6 +11,10 @@ export default defineConfig({
     }
   },
   server:{
+    allowedHosts: [
+      'p.sanwenyukaochi.cloudns.org', // Add this host to allowed hosts
+      'localhost', // You can also keep localhost or any other allowed host
+    ],
     host: '::',
     port: 5173,
     proxy:{

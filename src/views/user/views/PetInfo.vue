@@ -1,10 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { message } from 'ant-design-vue';
+import { useRoute, useRouter } from 'vue-router';
+import { message, Modal } from 'ant-design-vue';
+import { ShoppingCartOutlined } from '@ant-design/icons-vue';
 import petApi from "@/api/user/pet.js";
+import petOrderApi from '@/api/user/petOrder.js';
 
 const route = useRoute();
+const router = useRouter();
 const pet = ref(null);
 const loading = ref(true);
 const commentContent = ref('');
@@ -30,9 +33,24 @@ const fetchPetInfo = async () => {
   }
 };
 
-// 处理购买
-const handlePurchase = () => {
-  message.success('购买功能开发中...');
+// 购买宠物
+const handleBuyPet = () => {
+  Modal.confirm({
+    title: '确认购买',
+    content: '确定要购买这只宠物吗？',
+    okText: '确认',
+    cancelText: '取消',
+    async onOk() {
+      try {
+        await petOrderApi.createPetOrder(pet.value.petId);
+        message.success('购买成功');
+        router.push('/petOrder');
+      } catch (error) {
+        console.error('购买失败:', error);
+        message.error('购买失败');
+      }
+    }
+  });
 };
 
 // 提交评论
@@ -108,15 +126,17 @@ onMounted(() => {
               <h3>品种特征</h3>
               <p>{{ pet.type.typeFeature }}</p>
             </div>
-            <a-button 
-              type="primary" 
-              size="large" 
-              class="purchase-btn"
-              :disabled="pet.saleStatus"
-              @click="handlePurchase"
-            >
-              {{ pet.saleStatus ? '已售出' : '购买' }}
-            </a-button>
+            <div class="pet-actions">
+              <a-button 
+                type="primary" 
+                size="large" 
+                :disabled="pet.saleStatus"
+                @click="handleBuyPet"
+              >
+                <shopping-cart-outlined />
+                {{ pet.saleStatus ? '已售出' : '立即购买' }}
+              </a-button>
+            </div>
           </div>
         </div>
 
@@ -249,10 +269,9 @@ onMounted(() => {
   line-height: 1.6;
 }
 
-.purchase-btn {
-  margin-top: auto;
-  height: 48px;
-  font-size: 16px;
+.pet-actions {
+  margin-top: 24px;
+  text-align: center;
 }
 
 .comments-section {

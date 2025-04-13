@@ -9,8 +9,16 @@ const items = [
   {key: '2', label: '宠物购买', icon: () => h(PieChartOutlined), onClick: () => router.push('/pet')},
   {key: '3', label: '商店', icon: () => h(HomeFilled), onClick: () => router.push('/good')},
   {key: '4', label: '论坛', icon: () => h(HomeFilled), onClick: () => router.push('/forum')},
-  {key: '5', label: '公告', icon: () => h(HomeFilled),},
-  {key: '6', label: '个人中心', icon: () => h(HomeFilled),},
+  {key: '5', label: '公告', icon: () => h(HomeFilled), onClick: () => router.push('/notice')},
+  {key: '6', label: '个人中心', icon: () => h(HomeFilled),
+    children: [
+      {key: '6-1', label: '用户信息', icon: () => h(HomeFilled), onClick: () => router.push('/user')},
+      {key: '6-2', label: '宠物订单', icon: () => h(HomeFilled), onClick: () => router.push('/petOrder')},
+    ]
+  },
+  {key: '7', label: '宠物顾问', icon: () => h(HomeFilled), onClick: () => router.push('/chat')},
+  // {key: '8', label: '登录', icon: () => h(HomeFilled), onClick: () => router.push('/userLogin')},
+  // {key: '9', label: '注册', icon: () => h(HomeFilled), onClick: () => router.push('/userRegister')},
 ];
 </script>
 
@@ -35,7 +43,7 @@ const items = [
     >
     </a-menu>
     <img :src="logoImage" alt="admin logo" style="height: 60px;">
-    <div style="color: white;">宠物销售管理系统</div>
+<!--    <div style="color: white;">宠物销售管理系统</div>-->
   </div>
 </template>
 

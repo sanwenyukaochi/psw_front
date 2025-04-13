@@ -41,7 +41,7 @@ const handleLogin = async (values) => {
     }
     
     message.success('登录成功');
-    await router.push('/adminHome');
+    await router.push('/mainList');
   } catch (error) {
     console.error('登录失败:', error);
     message.error(error.message || '登录失败，请检查用户名和密码');
@@ -136,7 +136,10 @@ if (localStorage.getItem('adminUsername')) {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+  /* background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%); */
+  background-image: url('@/assets/img/psw/1.jpeg'); /* 使用背景图片 */
+  background-size: cover;
+  background-position: center;
 }
 
 .login-container {

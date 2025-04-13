@@ -13,4 +13,8 @@ export default {
         return await httpRequest.post('/api/v1/auth/userLogin', params);
     },
 
+    async register(params) {
+        return await httpRequest.post('/api/v1/auth/register', params)
+    }
+
 }

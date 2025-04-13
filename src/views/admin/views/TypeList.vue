@@ -52,8 +52,8 @@ const fetchTypes = async (page = 0) => {
     total.value = data.total;
     pageNum.value = data.pageNum;
   } catch (error) {
-    message.error(error);
-    console.error('获取类型列表失败:', error);
+    console.error(error);
+    message.error('获取类型列表失败:');
   } finally {
     loading.value = false;
   }

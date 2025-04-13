@@ -32,6 +32,7 @@ import UserSlider from "@/views/user/layout/UserSider.vue";
 
 /* 页面内容样式 */
 .content {
+  min-height: 86.8vh;
   padding: 0;
   margin-top: 64px;
   overflow-y: auto;
