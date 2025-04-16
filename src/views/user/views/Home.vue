@@ -26,7 +26,7 @@ import shopBg from "@/assets/img/bg/shop_bg.jpg";
 
   <div class="content-section" :style="{ backgroundImage: `url(${shopBg})` }">
     <div class="banner-container">Content</div>
-    <!--        <MainPetList/>-->
+<!--            <MainPetList/>-->
   </div>
 
   <div class="content-section">

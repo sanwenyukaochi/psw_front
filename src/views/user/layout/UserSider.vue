@@ -14,6 +14,7 @@ const items = [
     children: [
       {key: '6-1', label: '用户信息', icon: () => h(HomeFilled), onClick: () => router.push('/user')},
       {key: '6-2', label: '宠物订单', icon: () => h(HomeFilled), onClick: () => router.push('/petOrder')},
+      {key: '6-3', label: '物品订单', icon: () => h(HomeFilled), onClick: () => router.push('/goodOrder')},
     ]
   },
   {key: '7', label: '宠物顾问', icon: () => h(HomeFilled), onClick: () => router.push('/chat')},

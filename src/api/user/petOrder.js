@@ -2,8 +2,13 @@ import httpRequest from "@/axios/axiosConfig.js";
 
 export default {
 
-    async getPetOrderList() {
-        return await httpRequest.get('/api/v1/user/petOrderList');
+    async getPetOrderList(pageNum = 0, pageSize = 4) {
+        return await httpRequest.get('/api/v1/user/petOrderList', {
+            params: {
+                pageNum,
+                pageSize
+            }
+        });
     },
 
     async createPetOrder(petId) {

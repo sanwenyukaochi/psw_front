@@ -1,9 +1,10 @@
 <script setup>
 import { reactive, onMounted, ref, computed } from 'vue';
-import { message } from 'ant-design-vue';
-import { ShoppingOutlined } from '@ant-design/icons-vue';
+import { message, Modal } from 'ant-design-vue';
+import { ShoppingOutlined, CheckCircleOutlined } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';
 import goodApi from "@/api/user/good.js";
+import goodOrderApi from "@/api/user/goodOrder.js";
 
 // 状态管理
 const router = useRouter();
@@ -26,6 +27,14 @@ const currentPage = computed({
     pageNum.value = val - 1;
   }
 });
+
+// 购买相关状态
+const purchaseVisible = ref(false);
+const currentGood = ref(null);
+const purchaseCount = ref(1);
+const purchaseLoading = ref(false);
+const showSuccessAnimation = ref(false);
+const successMessage = ref('');
 
 // 获取商品列表
 const fetchGoods = async (currentPage = 0, size = 12) => {
@@ -71,6 +80,50 @@ const handleReset = () => {
 // 格式化价格
 const formatPrice = (price) => {
   return `¥${price.toFixed(2)}`;
+};
+
+// 打开购买弹窗
+const openPurchaseModal = (good) => {
+  currentGood.value = good;
+  purchaseCount.value = 1;
+  purchaseVisible.value = true;
+};
+
+// 关闭购买弹窗
+const closePurchaseModal = () => {
+  purchaseVisible.value = false;
+  currentGood.value = null;
+  purchaseCount.value = 1;
+};
+
+// 处理购买数量变化
+const handleCountChange = (value) => {
+  purchaseCount.value = value;
+};
+
+// 提交购买
+const handlePurchase = async () => {
+  if (!currentGood.value) return;
+  
+  try {
+    purchaseLoading.value = true;
+    await goodOrderApi.createGoodOrder(currentGood.value.goodId, { number: purchaseCount.value });
+    successMessage.value = `成功购买 ${currentGood.value.goodName} x${purchaseCount.value}`;
+    showSuccessAnimation.value = true;
+    closePurchaseModal();
+    // 刷新商品列表以更新库存
+    fetchGoods(pageNum.value, pageSize.value);
+    
+    // 3秒后自动隐藏动画
+    setTimeout(() => {
+      showSuccessAnimation.value = false;
+    }, 3000);
+  } catch (error) {
+    message.error(error);
+    console.error('购买失败');
+  } finally {
+    purchaseLoading.value = false;
+  }
 };
 
 // 初始化
@@ -127,7 +180,10 @@ onMounted(() => {
               <div v-for="good in goods" :key="good.goodId" class="good-card">
                 <div class="good-card-header">
                   <img :src="good.image || '/default-good.png'" :alt="good.goodName" class="good-image"/>
-                  <shopping-outlined class="cart-icon" />
+                  <shopping-outlined 
+                    class="cart-icon" 
+                    @click.stop="openPurchaseModal(good)"
+                  />
                 </div>
                 <div class="good-card-content">
                   <h3 class="good-name">{{ good.goodName }}</h3>
@@ -156,6 +212,51 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- 购买弹窗 -->
+    <a-modal
+      v-model:open="purchaseVisible"
+      title="购买商品"
+      @cancel="closePurchaseModal"
+      :confirmLoading="purchaseLoading"
+      @ok="handlePurchase"
+    >
+      <div v-if="currentGood" class="purchase-modal-content">
+        <div class="good-info">
+          <img :src="currentGood.image" :alt="currentGood.goodName" class="modal-good-image" />
+          <div class="good-details">
+            <h3>{{ currentGood.goodName }}</h3>
+            <p class="price">{{ formatPrice(currentGood.price) }}</p>
+            <p class="stock">库存: {{ currentGood.stock }}</p>
+          </div>
+        </div>
+        
+        <div class="purchase-form">
+          <a-form-item label="购买数量">
+            <a-input-number
+              v-model:value="purchaseCount"
+              :min="1"
+              @change="handleCountChange"
+            />
+          </a-form-item>
+          
+          <div class="total-price">
+            <span>总价：</span>
+            <span class="price">{{ formatPrice(currentGood.price * purchaseCount) }}</span>
+          </div>
+        </div>
+      </div>
+    </a-modal>
+
+    <!-- 购买成功动画 -->
+    <transition name="fade">
+      <div v-if="showSuccessAnimation" class="success-animation">
+        <div class="success-content">
+          <check-circle-outlined class="success-icon" />
+          <span>{{ successMessage }}</span>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -355,5 +456,120 @@ onMounted(() => {
   .stock {
     font-size: 12px;
   }
+}
+
+.purchase-modal-content {
+  padding: 16px 0;
+}
+
+.good-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-good-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.good-details {
+  flex: 1;
+}
+
+.good-details h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #1677ff;
+}
+
+.good-details .price {
+  color: #ff4d4f;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.good-details .stock {
+  color: #999;
+  font-size: 14px;
+}
+
+.purchase-form {
+  margin-top: 16px;
+}
+
+.total-price {
+  margin-top: 16px;
+  text-align: right;
+  font-size: 16px;
+}
+
+.total-price .price {
+  color: #ff4d4f;
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+  .good-info {
+    flex-direction: column;
+  }
+
+  .modal-good-image {
+    width: 100%;
+    height: 200px;
+  }
+}
+
+/* 成功动画样式 */
+.success-animation {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideDown 0.5s ease-out;
+}
+
+.success-content {
+  background: #52c41a;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.success-icon {
+  font-size: 20px;
+}
+
+/* 动画效果 */
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

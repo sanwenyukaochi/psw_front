@@ -11,6 +11,7 @@ const routes = [
             {path: '/pet',component: () => import('@/views/user/views/Pet.vue'),},
             {path: '/pet/:id',component: () => import('@/views/user/views/PetInfo.vue'),},
             {path: '/good',component: () => import('@/views/user/views/Good.vue'),},
+            {path: '/goodOrder',component: () => import('@/views/user/views/GoodOrder.vue'),},
             {path: '/forum',component: () => import('@/views/user/views/Forum.vue'),},
             {path: '/notice',component: () => import('@/views/user/views/Notice.vue'),},
             {path: '/user',component: () => import('@/views/user/views/User.vue'),},

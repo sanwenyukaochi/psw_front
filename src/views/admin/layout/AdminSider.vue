@@ -63,7 +63,7 @@ const items = [
   {key: '8', label: '商品订单管理', icon: () => h(AppstoreFilled), onClick: () => router.push('/goodOrderList'),},
   {key: '9', label: '论坛管理', icon: () => h(FireFilled), onClick: () => router.push('/forumList'),},
   {key: '10', label: '公告管理', icon: () => h(SoundFilled), onClick: () => router.push('/noticeList'),},
-  {key: '11', label: '宠物顾问', icon: () => h(RobotFilled), onClick: () => router.push('/chat'),},
+  // {key: '11', label: '宠物顾问', icon: () => h(RobotFilled), onClick: () => router.push('/chat'),},
 ];
 
 // 初始化时设置选中状态

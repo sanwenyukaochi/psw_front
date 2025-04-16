@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue';
 import { message, Modal } from 'ant-design-vue';
-import { UserOutlined, CalendarOutlined, DeleteOutlined } from '@ant-design/icons-vue';
-import petOrderApi from '@/api/user/petOrder.js';
+import { CalendarOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import goodOrderApi from '@/api/user/goodOrder.js';
 
 // 状态管理
 const loading = ref(false);
@@ -15,7 +15,7 @@ const pageSize = ref(4);
 const fetchOrders = async () => {
   try {
     loading.value = true;
-    const { data } = await petOrderApi.getPetOrderList(pageNum.value, pageSize.value);
+    const { data } = await goodOrderApi.getGoodOrderList(pageNum.value, pageSize.value);
     orders.value = data.records;
     total.value = data.total;
     pageNum.value = data.pageNum;
@@ -44,7 +44,7 @@ const handleDeleteOrder = (orderId) => {
     cancelText: '取消',
     async onOk() {
       try {
-        await petOrderApi.deletePetOrder(orderId);
+        await goodOrderApi.deleteGoodOrder(orderId);
         message.success('删除成功');
         fetchOrders();
       } catch (error) {
@@ -60,6 +60,11 @@ const formatDate = (timestamp) => {
   if (!timestamp) return '-';
   const date = new Date(timestamp);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};
+
+// 格式化价格
+const formatPrice = (price) => {
+  return `¥${price.toFixed(2)}`;
 };
 
 // 当前页码的计算属性
@@ -85,10 +90,10 @@ onMounted(() => {
 
       <a-spin :spinning="loading">
         <div class="order-list">
-          <div v-for="order in orders" :key="order.petOrderId" class="order-card">
+          <div v-for="order in orders" :key="order.goodOrderId" class="order-card">
             <div class="order-header">
               <div class="order-info">
-                <span class="order-id">订单号: {{ order.petOrderId }}</span>
+                <span class="order-id">订单号: {{ order.goodOrderId }}</span>
                 <span class="order-date">
                   <calendar-outlined />
                   {{ formatDate(order.createdAt) }}
@@ -102,15 +107,15 @@ onMounted(() => {
             </div>
 
             <div class="order-content">
-              <div class="pet-info">
-                <img :src="order.pet.image" :alt="order.pet.petName" class="pet-image" />
-                <div class="pet-details">
-                  <h3>{{ order.pet.petName }}</h3>
-                  <p>{{ order.pet.description }}</p>
-                  <div class="pet-meta">
-                    <span>品种: {{ order.pet.type.typeName }}</span>
-                    <span>性别: {{ order.pet.sex }}</span>
-                    <span>颜色: {{ order.pet.color }}</span>
+              <div class="good-info">
+                <img :src="order.good.image" :alt="order.good.goodName" class="good-image" />
+                <div class="good-details">
+                  <h3>{{ order.good.goodName }}</h3>
+                  <p>{{ order.good.description }}</p>
+                  <div class="good-meta">
+                    <span>单价: {{ formatPrice(order.good.price) }}</span>
+                    <span>数量: {{ order.count }}</span>
+                    <span>总价: {{ formatPrice(order.totalPrice) }}</span>
                   </div>
                 </div>
               </div>
@@ -120,7 +125,7 @@ onMounted(() => {
               <a-button 
                 v-if="!order.shippingStatus"
                 danger 
-                @click="handleDeleteOrder(order.petOrderId)"
+                @click="handleDeleteOrder(order.goodOrderId)"
               >
                 <delete-outlined />
                 取消订单
@@ -212,29 +217,29 @@ onMounted(() => {
   margin-bottom: 16px;
 }
 
-.pet-info {
+.good-info {
   display: flex;
   gap: 12px;
 }
 
-.pet-image {
+.good-image {
   width: 80px;
   height: 80px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-.pet-details {
+.good-details {
   flex: 1;
 }
 
-.pet-details h3 {
+.good-details h3 {
   font-size: 16px;
   margin: 0 0 4px;
   color: #1677ff;
 }
 
-.pet-details p {
+.good-details p {
   color: #666;
   margin-bottom: 4px;
   font-size: 13px;
@@ -244,7 +249,7 @@ onMounted(() => {
   overflow: hidden;
 }
 
-.pet-meta {
+.good-meta {
   display: flex;
   gap: 12px;
   color: #999;
@@ -269,16 +274,16 @@ onMounted(() => {
     padding: 12px;
   }
 
-  .pet-info {
+  .good-info {
     flex-direction: column;
   }
 
-  .pet-image {
+  .good-image {
     width: 100%;
     height: 160px;
   }
 
-  .pet-meta {
+  .good-meta {
     flex-direction: column;
     gap: 4px;
   }
