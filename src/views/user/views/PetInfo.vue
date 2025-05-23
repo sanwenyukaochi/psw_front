@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { message, Modal } from 'ant-design-vue';
-import { ShoppingCartOutlined } from '@ant-design/icons-vue';
+import { ShoppingCartOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
 import petApi from "@/api/user/pet.js";
 import petOrderApi from '@/api/user/petOrder.js';
 
@@ -12,6 +12,10 @@ const pet = ref(null);
 const loading = ref(true);
 const commentContent = ref('');
 const submitting = ref(false);
+
+// 直播弹窗控制
+const streamVisible = ref(false);
+const currentStreamUrl = ref('');
 
 // 格式化日期
 const formatDate = (timestamp) => {
@@ -76,6 +80,20 @@ const handleSubmitComment = async () => {
   }
 };
 
+// 弹窗播放直播流
+const goToStream = (streamUrl) => {
+  if (streamUrl) {
+    currentStreamUrl.value = streamUrl;
+    streamVisible.value = true;
+  } else {
+    message.info('该宠物暂无直播');
+  }
+};
+const handleStreamClose = () => {
+  streamVisible.value = false;
+  currentStreamUrl.value = '';
+};
+
 onMounted(() => {
   fetchPetInfo();
 });
@@ -89,6 +107,10 @@ onMounted(() => {
         <div class="pet-info-section">
           <div class="pet-images">
             <img :src="pet.image" :alt="pet.petName" class="main-image" />
+            <video-camera-outlined 
+              class="stream-icon" 
+              @click.stop="goToStream(pet.streamUrl)"
+            />
           </div>
           <div class="pet-info">
             <h1 class="pet-name">{{ pet.petName }}</h1>
@@ -181,6 +203,23 @@ onMounted(() => {
         </div>
       </div>
     </a-spin>
+    <!-- 直播弹窗 -->
+    <a-modal
+      v-model:open="streamVisible"
+      title="宠物直播"
+      :footer="null"
+      width="800px"
+      @cancel="handleStreamClose"
+    >
+      <div class="stream-container">
+        <img
+          v-if="currentStreamUrl"
+          :src="currentStreamUrl"
+          alt="宠物直播流"
+          class="stream-img"
+        />
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -216,6 +255,23 @@ onMounted(() => {
   height: 400px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.stream-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 32px;
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.stream-icon:hover {
+  color: #1677ff;
+  transform: scale(1.2);
 }
 
 .pet-info {
@@ -361,5 +417,17 @@ onMounted(() => {
   .info-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.stream-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stream-img {
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
 }
 </style>

@@ -51,18 +51,14 @@ export async function userLogin(account, password) {
             password: encryptPwd
         };
         response = await AuthApi.getUserToken(params);
-        
-        // 检查响应状态
         if (response.code !== '0') {
             throw new Error(response.message || '登录失败');
         }
-
         const { data: accessToken } = response;
         if (!accessToken || accessToken === 'null') {
             throw new Error('登录失败：未获取到有效的访问令牌');
         }
-        
-        localStorage.setItem('Authorization', accessToken);
+                localStorage.setItem('Authorization', accessToken);
         localStorage.setItem('userType', 'user');
     } catch (error) {
         throw error;

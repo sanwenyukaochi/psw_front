@@ -1,9 +1,26 @@
 <script setup>
-
+import { ref } from 'vue';
 import h3_banner_slide01 from "@/assets/img/banner/h3_banner_slide01.jpg";
 import h3_banner_img01 from "@/assets/img/banner/h3_banner_img01.jpg";
 import h3_banner_img02 from "@/assets/img/banner/h3_banner_img02.jpg";
 import shopBg from "@/assets/img/bg/shop_bg.jpg";
+import MainPetList from "@/components/MainPetList.vue";
+
+const streamVisible = ref(false);
+const currentStreamUrl = ref('');
+
+const goToStream = (streamUrl) => {
+  if (streamUrl) {
+    currentStreamUrl.value = streamUrl;
+    streamVisible.value = true;
+  } else {
+    alert('暂无直播');
+  }
+};
+const handleStreamClose = () => {
+  streamVisible.value = false;
+  currentStreamUrl.value = '';
+};
 </script>
 
 <template>
@@ -25,14 +42,33 @@ import shopBg from "@/assets/img/bg/shop_bg.jpg";
   </div>
 
   <div class="content-section" :style="{ backgroundImage: `url(${shopBg})` }">
-    <div class="banner-container">Content</div>
-<!--            <MainPetList/>-->
+    <div class="banner-container">
+      <MainPetList :onStream="goToStream" />
+    </div>
   </div>
 
-  <div class="content-section">
-    <div class="banner-container">Content</div>
-    <!--        <MainGoodList/>-->
-  </div>
+  <!-- 直播弹窗 -->
+  <a-modal
+    v-model:open="streamVisible"
+    title="宠物直播"
+    :footer="null"
+    width="800px"
+    @cancel="handleStreamClose"
+  >
+    <div class="stream-container">
+      <img
+        v-if="currentStreamUrl"
+        :src="currentStreamUrl"
+        alt="宠物直播流"
+        class="stream-img"
+      />
+    </div>
+  </a-modal>
+
+<!--  <div class="content-section">-->
+<!--    <div class="banner-container">Content</div>-->
+<!--            <MainGoodList/>-->
+<!--  </div>-->
 </template>
 
 <style scoped>
@@ -96,5 +132,17 @@ import shopBg from "@/assets/img/bg/shop_bg.jpg";
 
 .footer a:hover {
   color: #f4a261;
+}
+
+.stream-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stream-img {
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
 }
 </style>

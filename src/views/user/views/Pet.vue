@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, ref, computed } from 'vue';
 import { message } from 'ant-design-vue';
-import { HeartOutlined } from '@ant-design/icons-vue';
+import { HeartOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';
 import petApi from "@/api/user/pet.js";
 
@@ -13,6 +13,8 @@ const total = ref(0);
 const pageNum = ref(0);
 const pageSize = ref(9);
 const typeOptions = ref([]);
+const currentStreamUrl = ref('');
+const streamVisible = ref(false);
 
 const filter = reactive({
   petName: '',
@@ -94,6 +96,22 @@ const goToPetDetail = (petId) => {
   router.push(`/pet/${petId}`);
 };
 
+// 跳转到直播页面
+const goToStream = (streamUrl) => {
+  if (streamUrl) {
+    currentStreamUrl.value = streamUrl;
+    streamVisible.value = true;
+  } else {
+    message.info('该宠物暂无直播');
+  }
+};
+
+// 关闭直播弹窗
+const handleStreamClose = () => {
+  streamVisible.value = false;
+  currentStreamUrl.value = '';
+};
+
 // 初始化
 onMounted(() => {
   fetchPetTypes();
@@ -160,7 +178,10 @@ onMounted(() => {
               <div v-for="pet in pets" :key="pet.petId" class="pet-card" @click="goToPetDetail(pet.petId)">
                 <div class="pet-card-header">
                   <img :src="pet.image || '/default-pet.png'" :alt="pet.petName" class="pet-image"/>
-                  <heart-outlined class="favorite-icon" />
+                  <video-camera-outlined 
+                    class="stream-icon" 
+                    @click.stop="goToStream(pet.streamUrl)"
+                  />
                 </div>
                 <div class="pet-card-content">
                   <h3 class="pet-name">{{ pet.petName }}</h3>
@@ -198,6 +219,24 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- 直播弹窗 -->
+    <a-modal
+      v-model:open="streamVisible"
+      title="宠物直播"
+      :footer="null"
+      width="800px"
+      @cancel="handleStreamClose"
+    >
+      <div class="stream-container">
+        <img
+          v-if="currentStreamUrl"
+          :src="currentStreamUrl"
+          alt="宠物直播流"
+          class="stream-img"
+        />
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -277,7 +316,7 @@ onMounted(() => {
   display: block;
 }
 
-.favorite-icon {
+.stream-icon {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -285,6 +324,12 @@ onMounted(() => {
   color: #fff;
   cursor: pointer;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stream-icon:hover {
+  color: #1677ff;
+  transform: scale(1.2);
 }
 
 .pet-card-content {
@@ -376,5 +421,17 @@ onMounted(() => {
   .info-item {
     font-size: 12px;
   }
+}
+
+.stream-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stream-img {
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
 }
 </style>

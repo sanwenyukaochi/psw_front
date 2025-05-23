@@ -14,6 +14,7 @@ export default defineConfig({
     allowedHosts: [
       'p.sanwenyukaochi.cloudns.org', // Add this host to allowed hosts
       'localhost', // You can also keep localhost or any other allowed host
+      'closely-quiet-lamb.ngrok-free.app'
     ],
     host: '::',
     port: 5173,
